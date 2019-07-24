@@ -1,0 +1,35 @@
+import argparse, os, sys, fnmatch, time
+
+def main():
+	time1=time.time()
+	parser = argparse.ArgumentParser(description='Argument required to process data: input path')
+	parser.add_argument('-i', '--input', type=str, nargs='+', required=True, help='Path to the data directory')
+	parser.add_argument('--output', default=os.getcwd(), help='Use this option to change output directly')
+	parser.parse_args()
+
+	args = parser.parse_args()
+	
+	
+	for files in args.input:
+		files_list = fnmatch.filter(os.listdir(files), '*.cbf')
+		number = range(1, len(files_list), 15)
+		new_list = []
+		for num in number:
+			new_list.append(files_list[num])
+		#print(new_list)
+	directory_name_list = []
+	for each in new_list:
+		end_index = each.find('_phi')
+		start_index = each.rfind('grid_*')
+		dir_name = each[start_index+8:end_index]
+		directory_name_list.append(dir_name)
+	print(directory_name_list)
+			
+		
+
+		
+	time2 = time.time()
+	print("Total time: {:.1f} s".format(time2-time1))
+	
+if __name__=='__main__':
+	main()
