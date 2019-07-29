@@ -1,4 +1,5 @@
 import argparse, os, sys, fnmatch, time
+import grid
 
 def main():
 	time1=time.time()
@@ -9,23 +10,14 @@ def main():
 
 	args = parser.parse_args()
 	
-	
-	for files in args.input:
-		files_list = fnmatch.filter(os.listdir(files), '*.cbf')
-		number = range(1, len(files_list), 15)
-		new_list = []
-		for num in number:
-			new_list.append(files_list[num])
-		#print(new_list)
-	directory_name_list = []
-	for each in new_list:
-		end_index = each.find('_phi')
-		start_index = each.rfind('grid_*')
-		dir_name = each[start_index+8:end_index]
-		directory_name_list.append(dir_name)
-	print(directory_name_list)
-			
-		
+	# Find grid directories and make a list of them:
+	for directory in args.input:
+		grids_list = fnmatch.filter(os.listdir(directory), 'grid*')
+		#print(grids_list)
+		for grid_directory in grids_list:
+			grid_path = "{}/{}".format(directory, grid_directory)
+			new_grid_path = "{}/{}".format(args.output, grid_directory)
+			grid_class = grid.Grid(args, grid_path, new_grid_path)
 
 		
 	time2 = time.time()
